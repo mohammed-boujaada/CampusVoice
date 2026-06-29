@@ -107,7 +107,7 @@ graph TD
 | ⚙️ **Application** | Flask + Gunicorn | Logique métier, authentification, rate limiting |
 | 💾 **Données** | Azure SQL Database | Stockage persistant, connexions chiffrées |
 
----
+----
 
 ## 🔒 Sécurité
 
