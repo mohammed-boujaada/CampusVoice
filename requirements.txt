@@ -1,0 +1,7 @@
+flask
+pyodbc
+python-dotenv
+gunicorn
+Flask-WTF
+Flask-Limiter
+markupsafe
