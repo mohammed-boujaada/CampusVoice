@@ -401,7 +401,7 @@ campusvoice/
   <tr>
     <td align="center">
       <a href="https://github.com/boujaadamohammed">
-        <img src="https://github.com/boujaadamohammed.png" width="120px;" alt="Mohammed Boujaada"/>
+        <img src="https://avatars.githubusercontent.com/boujaadamohammed" width="120px;" alt="Mohammed Boujaada"/>
         <br/>
         <sub><b>Mohammed Boujaada</b></sub>
       </a>
@@ -417,7 +417,7 @@ campusvoice/
     </td>
     <td align="center">
       <a href="https://github.com/mohamedzahir">
-        <img src="https://github.com/mohamedzahir.png" width="120px;" alt="Mohamed Zahir"/>
+        <img src="https://avatars.githubusercontent.com/mohamedzahir" width="120px;" alt="Mohamed Zahir"/>
         <br/>
         <sub><b>Mohamed Zahir</b></sub>
       </a>
@@ -430,6 +430,8 @@ campusvoice/
     </td>
   </tr>
 </table>
+
+</div>
 
 **🏫 Institution** : FPN Nador — Master Intelligence Artificielle & Technologies Émergentes  
 **📚 Module** : Cloud Computing  
