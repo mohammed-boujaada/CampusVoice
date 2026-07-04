@@ -330,7 +330,7 @@ campusvoice/
 │
 ├── static/                    # Ressources statiques
 │   ├── style.css              # Styles CSS
-│   └── logo.png               # Logo CampusVoice
+│   
 │
 ├── templates/                 # Templates Jinja2
 │   ├── index.html             # Page d'accueil
@@ -461,7 +461,7 @@ Libre d'utilisation, de modification et de partage dans un cadre académique.
 
 ```bibtex
 @misc{boujaada2026campusvoice,
-  author = {Boujaada, Mohammed and Zahir, Mohamed},
+  author = {Boujaada Mohammed and Zahir Mohamed},
   title = {CampusVoice: Anonymous University Feedback Platform on Azure},
   year = {2026},
   publisher = {GitHub},
