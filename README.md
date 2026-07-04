@@ -411,7 +411,7 @@ campusvoice/
       <a href="https://github.com/mohammed-boujaada">
         <img src="https://img.shields.io/badge/GitHub-@mohammed-boujaada-black?logo=github"/>
       </a>
-      <a href="https://www.linkedin.com/in/mohammed-boujaada/">
+      <a href="https://www.linkedin.com/in/mohammed-boujaada-229a3333a/">
         <img src="https://img.shields.io/badge/LinkedIn-Boujaada%20Mohammed-blue?logo=linkedin"/>
       </a>
     </td>
