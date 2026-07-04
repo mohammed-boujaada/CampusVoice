@@ -400,32 +400,32 @@ campusvoice/
 <table>
   <tr>
     <td align="center">
-      <a href="https://github.com/boujaadamohammed">
-        <img src="https://avatars.githubusercontent.com/boujaadamohammed" width="120px;" alt="Mohammed Boujaada"/>
+      <a href="https://github.com/mohammed-boujaada">
+        <img src="https://avatars.githubusercontent.com/mohammed-boujaada" width="120px;" alt="Mohammed Boujaada"/>
         <br/>
         <sub><b>Mohammed Boujaada</b></sub>
       </a>
       <br/>
       🎓 Master MIATE — FPN Nador
       <br/>
-      <a href="https://github.com/boujaadamohammed">
-        <img src="https://img.shields.io/badge/GitHub-@boujaadamohammed-black?logo=github"/>
+      <a href="https://github.com/mohammed-boujaada">
+        <img src="https://img.shields.io/badge/GitHub-@mohammed-boujaada-black?logo=github"/>
       </a>
-      <a href="https://www.linkedin.com/in/boujaadamohammed/">
+      <a href="https://www.linkedin.com/in/mohammed-boujaada/">
         <img src="https://img.shields.io/badge/LinkedIn-Boujaada%20Mohammed-blue?logo=linkedin"/>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/mohamedzahir">
-        <img src="https://avatars.githubusercontent.com/mohamedzahir" width="120px;" alt="Mohamed Zahir"/>
+      <a href="https://github.com/moza369">
+        <img src="https://avatars.githubusercontent.com/moza369" width="120px;" alt="Mohamed Zahir"/>
         <br/>
         <sub><b>Mohamed Zahir</b></sub>
       </a>
       <br/>
       🎓 Master MIATE — FPN Nador
       <br/>
-      <a href="https://github.com/mohamedzahir">
-        <img src="https://img.shields.io/badge/GitHub-@mohamedzahir-black?logo=github"/>
+      <a href="https://github.com/moza369">
+        <img src="https://img.shields.io/badge/GitHub-@moza369-black?logo=github"/>
       </a>
     </td>
   </tr>
@@ -466,7 +466,7 @@ Libre d'utilisation, de modification et de partage dans un cadre académique.
   year = {2026},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/mohammed-boujaada/CampusVoice}}
+  howpublished = {\url{https://github.com/boujaadamohammed/campusvoice}}
 }
 ```
 
