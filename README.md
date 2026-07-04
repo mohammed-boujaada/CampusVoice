@@ -466,7 +466,7 @@ Libre d'utilisation, de modification et de partage dans un cadre académique.
   year = {2026},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/boujaadamohammed/campusvoice}}
+  howpublished = {\url{https://github.com/mohammed-boujaada/CampusVoice}}
 }
 ```
 
