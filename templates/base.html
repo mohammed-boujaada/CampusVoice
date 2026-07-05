@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>University Feedback Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4.3">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">🏛 CampusVoice <span class="logo-subtitle">| Secure Portal</span></a>
+            <nav>
+                {% if session.get('user') %}
+                    <span style="margin-right: 15px; font-weight: 600;">{{ session['name'] }}</span>
+                    <a href="/logout" class="nav-link nav-link--danger">Sign Out</a>
+                {% else %}
+                    <a href="/admin" class="nav-link">Staff Login</a>
+                {% endif %}
+
+                <button type="button" class="icon-btn theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+        
+        <footer class="site-footer">
+            &copy; 2026 FPN IT Services. All responses are anonymized and encrypted via Azure SQL.
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            const storageKey = 'theme'; // 'light' | 'dark'
+            const root = document.documentElement;
+            const btn = document.getElementById('themeToggle');
+
+            function prefersDark() {
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            function effectiveTheme() {
+                const attr = root.getAttribute('data-theme');
+                if (attr === 'dark' || attr === 'light') return attr;
+                return prefersDark() ? 'dark' : 'light';
+            }
+
+            function applyTheme(theme) {
+                if (theme === 'dark' || theme === 'light') {
+                    root.setAttribute('data-theme', theme);
+                } else {
+                    root.removeAttribute('data-theme');
+                }
+                const isDark = (effectiveTheme() === 'dark');
+                if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+            }
+
+            const saved = localStorage.getItem(storageKey);
+            applyTheme(saved);
+
+            if (btn) {
+                btn.addEventListener('click', function () {
+                    const current = effectiveTheme();
+                    const next = (current === 'dark') ? 'light' : 'dark';
+                    localStorage.setItem(storageKey, next);
+                    applyTheme(next);
+                });
+            }
+        })();
+    </script>
+
+</body>
+</html>

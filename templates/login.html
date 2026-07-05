@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-hero page-hero--primary">
+    <div class="card card--narrow">
+        <div class="center" style="margin-bottom: 20px;">
+            <h1 style="margin: 0 0 8px 0; font-weight: 800; color: var(--primary); font-size: 2rem;">🔐 Staff Portal</h1>
+            <p class="muted" style="margin: 0;">Sign in to view evaluations</p>
+        </div>
+        
+        <form method="POST" class="form" style="gap: 20px;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div>
+                <label>Username</label>
+                <input type="text" name="username" placeholder="e.g. prof_ahmed" required>
+            </div>
+            
+            <div>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-block" style="margin-top: 8px;">Sign In</button>
+        </form>
+        
+        <p class="center muted" style="margin-top: 14px; font-size: 0.85rem;">🔒 Restricted to University Faculty Only</p>
+    </div>
+</div>
+{% endblock %}

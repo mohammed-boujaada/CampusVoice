@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; gap: 12px; flex-wrap: wrap;">
+    <div>
+        <h2>{% if role == 'admin' %}Coordinator Overview{% else %}Instructor Dashboard{% endif %}</h2>
+        <p class="muted">View recent student evaluations.</p>
+    </div>
+    {% if role == 'admin' %}
+    <a href="/professors" class="btn">👨‍🏫 Professors</a>
+    {% endif %}
+    {% if role == 'professor' %}
+    <div class="card" style="padding: 15px; margin: 0; text-align: right; border-left: 4px solid var(--accent);">
+        <span style="font-size: 2rem; font-weight: bold; color: var(--primary);">{{ avg }}</span>
+        <span class="muted" style="display: block; font-size: 0.8rem;">Average Rating</span>
+    </div>
+    {% endif %}
+</div>    <!-- Statistics Card -->
+    {% if role == 'professor' %}
+    <div class="card" style="margin-bottom: 40px; background: linear-gradient(135deg, #f8f4ff 0%, #f3f0ff 100%); border: 2px solid #e9d5ff; text-align: center;">
+        <div style="display: flex; align-items: center; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <div style="font-size: 3rem;">⭐</div>
+            <div>
+                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 0.95rem;">Average Course Rating</p>
+                <p style="margin: 0; font-size: 2.5rem; font-weight: 700; color: #6366f1;">{{ avg }} / 5.0</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% if role == 'admin' and alerts %}
+    {% for alert in alerts %}
+    <div class="alert alert-error"><strong>Attention Needed:</strong> {{ alert }}</div>
+    {% endfor %}
+{% endif %}
+
+<!-- FILTERS -->
+<div class="card card--tint" style="padding: 20px; margin-bottom: 20px;">
+    <h3 style="margin-top: 0; font-size: 1rem;">🔍 Filter Feedback</h3>
+    <form method="GET" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+        <div>
+            <label style="font-size: 0.85rem;">From Date</label>
+            <input type="date" name="date_from" value="{{ date_from }}">
+        </div>
+        <div>
+            <label style="font-size: 0.85rem;">To Date</label>
+            <input type="date" name="date_to" value="{{ date_to }}">
+        </div>
+        <div>
+            <label style="font-size: 0.85rem;">Rating</label>
+            <select name="rating_filter">
+                <option value="">All Ratings</option>
+                <option value="1" {% if rating_filter == '1' %}selected{% endif %}>⭐ 1 Star</option>
+                <option value="2" {% if rating_filter == '2' %}selected{% endif %}>⭐⭐ 2 Stars</option>
+                <option value="3" {% if rating_filter == '3' %}selected{% endif %}>⭐⭐⭐ 3 Stars</option>
+                <option value="4" {% if rating_filter == '4' %}selected{% endif %}>⭐⭐⭐⭐ 4 Stars</option>
+                <option value="5" {% if rating_filter == '5' %}selected{% endif %}>⭐⭐⭐⭐⭐ 5 Stars</option>
+            </select>
+        </div>
+        <button type="submit" class="btn">Apply</button>
+        <a href="/dashboard" class="btn btn-secondary">Clear</a>
+        {% if role in ['professor', 'admin'] %}
+        <a href="{{ url_for('export', date_from=date_from, date_to=date_to, rating_filter=rating_filter) }}" class="btn btn-success" style="margin-left: auto;">📥 Export</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <table style="width: 100%;">
+        <thead>
+            <tr>
+                <th width="15%">Date</th>
+                {% if role == 'admin' %}<th width="15%">Instructor</th>{% endif %}
+                <th width="20%">Course</th>
+                <th width="10%">Rating</th>
+                <th>Student Feedback</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in feedbacks %}
+            <tr>
+                <td class="muted" style="font-size: 0.9rem;">{{ f.Timestamp.strftime('%Y-%m-%d') }}</td>
+                {% if role == 'admin' %}
+                    <td style="font-weight: 600;">{{ f.ProfessorID }}</td>
+                {% endif %}
+                <td>{{ f.CourseName }}</td>
+                <td>
+                    {% if f.Rating < 3 %}
+                        <span class="badge bad">{{ f.Rating }} / 5</span>
+                    {% else %}
+                        <span class="badge good">{{ f.Rating }} / 5</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div>{{ f.Comment }}</div>
+                    {% if f.Suggestion %}
+                        <div class="chip" style="margin-top: 5px;">
+                            <strong>Suggestion:</strong> {{ f.Suggestion }}
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="muted" style="text-align: center; padding: 30px;">No evaluations found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
