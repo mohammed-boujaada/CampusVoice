@@ -1,6 +1,6 @@
 # CampusVoice
 
-```html
+
 <div align="center">
 
 <img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white" />
@@ -15,71 +15,59 @@
 
 **Secure Anonymous Feedback Platform for Universities**
 
-**Cloud Computing Project — MIATE Master's — FPN Nador**
+**Cloud Computing Project — MIATE Master's — FSA Nador**
 
 [Overview](#overview) • [Architecture](#architecture) • [Security](#security) • [Azure Deployment](#azure-deployment) • [Team](#team)
 
 </div>
-```
+
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
-
 - [Key Features](#key-features)
-
 - [Architecture](#architecture)
-
 - [Security](#security)
-
 - [Database](#database)
-
 - [User Roles](#user-roles)
-
 - [Installation](#installation)
-
 - [Azure Deployment](#azure-deployment)
-
 - [Project Structure](#project-structure)
-
 - [Tests](#tests)
-
 - [Roadmap](#roadmap)
-
 - [Team](#team)
-
 - [License](#license)
 
 ---
 
 ## Overview
 
-**CampusVoice** is a secure web platform that allows students to submit **anonymous evaluations** of their courses and professors. It provides teachers and administrators with a **secure dashboard** with actionable analytics.
+**CampusVoice** is a secure web platform designed to facilitate **strictly anonymous evaluations** of courses and professors by students. It provides faculty and administrators with a **secure, analytics-driven dashboard** to derive actionable insights.
 
->  **Purpose** : Break down the barrier of fear by providing a 100% anonymous feedback channel while ensuring security, traceability, and scalability through the Microsoft Azure cloud.
+> **Purpose**: Eliminate response bias and encourage candid feedback by providing a completely anonymous evaluation channel, while ensuring enterprise-grade security, traceability, and scalability via the Microsoft Azure cloud infrastructure.
 
 ### Problem Addressed
-| Problem | CampusVoice Solution |
+| Challenge | CampusVoice Solution |
 | :--- | :--- |
-|  Students do not dare to provide honest feedback |  **100% anonymous** submission, without an account |
-|  Professors do not have a clear overview of feedback |  Dashboard with filters, statistics, and CSV export |
-|  Risks of spam and abuse |  Rate limiting + 1 feedback/professor/day/IP |
-|  Complex deployment |  PaaS architecture on Azure (App Service + SQL) |
+| **Reluctance to provide candid feedback** | **Strictly anonymous** submission process requiring no user accounts or tracking. |
+| **Lack of centralized insights for faculty** | Comprehensive dashboard featuring advanced filtering, statistical analytics, and CSV export capabilities. |
+| **Vulnerability to spam and system abuse** | Robust rate limiting and IP-based throttling (1 evaluation per professor/day/IP). |
+| **Complex infrastructure management** | Streamlined PaaS deployment utilizing Azure App Service and Azure SQL Database. |
 
 ---
 
 ## Key Features
 | Category | Description |
 | :--- | :--- |
-|  **Complete Anonymity** | Submission without an account, tracking, or cookies |
-|  **RBAC** | Role-based access control (Student / Professor / Admin) |
-|  **Real-Time Dashboard** | Filtering, statistics, and CSV export of feedback |
-|  **Enhanced Security** | CSRF, rate limiting, secure headers, sessions HttpOnly |
-|  **Cloud-Native** | Deployed on Azure App Service + Azure SQL Database |
-|  **Export CSV** | Easy analysis in Excel / Google Sheets |
-| **Anti-spam** | Limited to 1 feedback per professor per day per IP |
+| **Strict Anonymity** | Submission without user accounts, tracking mechanisms, or persistent cookies. |
+| **RBAC** | Role-Based Access Control (Student / Professor / Administrator). |
+| **Real-Time Dashboard** | Dynamic filtering, statistical aggregations, and CSV data export. |
+| **Enterprise-Grade Security** | CSRF mitigation, rate limiting, secure HTTP headers, and `HttpOnly` session cookies. |
+| **Cloud-Native** | Architected and deployed on Azure App Service + Azure SQL Database. |
+| **Data Portability** | Seamless CSV export for external analysis in Excel / Google Sheets. |
+| **Spam Mitigation** | Hard limit of 1 feedback submission per professor, per day, per IP address. |
 
 ---
 
@@ -88,55 +76,36 @@
 ### Architecture Diagram
 
 ```mermaid
-
 graph TD
+    A[Web Browser HTTPS] -->|TLS 1.2+| B[Azure App Service]
+    B -->|Flask + Gunicorn| C[Presentation Layer]
+    C -->|Jinja2 Templates| D[Application Layer]
+    D -->|Business Logic| E[Data Layer]
+    E -->|ODBC Encrypted| F[(Azure SQL Database)]
 
-    A[ Web Browser HTTPS] -->|TLS 1.2+| B[Azure App Service]
+    subgraph "Azure App Service"
+        B
+        C
+        D
+        G[Flask-WTF CSRF]
+        H[Flask-Limiter]
+        I[Security Headers]
+    end
 
-    B -->|Flask + Gunicorn| C[Presentation Layer]
-
-    C -->|Jinja2 Templates| D[Application Layer]
-
-    D -->|Business Logic| E[Data Layer]
-
-    E -->|ODBC Encrypted| F[(Azure SQL Database)]
-
-    subgraph "Azure App Service"
-
-        B
-
-        C
-
-        D
-
-        G[Flask-WTF CSRF]
-
-        H[Flask-Limiter]
-
-        I[Security Headers]
-
-    end
-
-    subgraph "Azure SQL"
-
-        F
-
-        J[Users Table]
-
-        K[Professors Table]
-
-        L[Feedbacks Table]
-
-    end
-
+    subgraph "Azure SQL"
+        F
+        J[Users Table]
+        K[Professors Table]
+        L[Feedbacks Table]
+    end
 ```
 
 ### 3-Tier Architecture
 | Layer | Technology | Role |
 | :--- | :--- | :--- |
-|  **Presentation** | Flask + Jinja2 | User interface, HTML/CSS templates |
-|  **Application** | Flask + Gunicorn | Business logic, authentication, rate limiting |
-|  **Data** | Azure SQL Database | Persistent storage, encrypted connections |
+| **Presentation** | Flask + Jinja2 | User interface rendering and HTML/CSS templating. |
+| **Application** | Flask + Gunicorn | Business logic execution, authentication, and request throttling. |
+| **Data** | Azure SQL Database | Persistent, highly-available storage with encrypted transit. |
 
 ----
 
@@ -145,29 +114,26 @@ graph TD
 ### Defense Mechanisms
 | Feature | Purpose | Technology |
 | :--- | :--- | :--- |
-|  **CSRF Protection** | Prevent cross-site requests | Flask-WTF |
-|  **Rate Limiting** | Block brute-force attacks and spam | Flask-Limiter (5 attempts / 60s) |
-|  **Anti-Spam** | 1 feedback/professor/day/IP | Custom logic |
-|  **Secure Headers** | Protection against XSS, clickjacking, and MIME attacks | CSP, HSTS, X-Frame-Options |
-|  **Session Security** | Secure cookies | HttpOnly + Secure + SameSite |
-|  **Input Sanitization** | XSS prevention | `markupsafe.escape()` |
+| **CSRF Protection** | Prevent cross-site request forgery | Flask-WTF |
+| **Rate Limiting** | Mitigate brute-force and automated spam | Flask-Limiter (5 attempts / 60s) |
+| **Spam Mitigation** | Enforce 1 feedback/professor/day/IP limit | Custom application-level logic |
+| **Secure Headers** | Defend against XSS, clickjacking, and MIME-sniffing | CSP, HSTS, X-Frame-Options |
+| **Session Security** | Prevent session hijacking | `HttpOnly` + `Secure` + `SameSite` cookies |
+| **Input Sanitization** | Prevent Cross-Site Scripting (XSS) | `markupsafe.escape()` |
 
 ### Azure-Level Security
 
--  **TLS 1.2+** for all communications
-
--  **SQL Firewall** — Only the App Service can connect
-
--  **Encrypted credentials** — Environment variables (no secrets in the code)
-
--  **Network isolation** — Private endpoints available in production
+- **TLS 1.2+** enforced for all data in transit.
+- **Azure SQL Firewall** — Rules configured to restrict database access exclusively to the App Service.
+- **Secrets Management** — Credentials injected via Environment Variables (zero secrets in source code).
+- **Network Isolation** — Private endpoint integration available for production environments.
 
 ### Role-Based Authentication
-| Role | Authentication | Access |
+| Role | Authentication | Access Level |
 | :--- | :--- | :--- |
-|  **Student** |  None (anonymous) | Feedback submission only |
-|  **Professor** |  Username + Password | Dashboard showing only their feedback |
-|  **Admin** |  Username + Password | Global access to all data |
+| **Student** | None (Anonymous) | Evaluation submission interface only. |
+| **Professor** | Username + Password | Dashboard restricted to their specific evaluation data. |
+| **Admin** | Username + Password | Unrestricted global access to all institutional data. |
 
 ---
 
@@ -176,106 +142,67 @@ graph TD
 ### Relational Schema
 
 ```mermaid
-
 erDiagram
-
-    USERS ||--o| PROFESSORS : "has"
-
-    PROFESSORS ||--o{ FEEDBACKS : "receives"
-
-    USERS {
-
-        int ID PK
-
-        string Username
-
-        string PasswordHash
-
-        string Role
-
-        datetime CreatedAt
-
-    }
-
-    PROFESSORS {
-
-        int ID PK
-
-        string Name
-
-        string Email
-
-        string Course
-
-        int AppUserId FK
-
-    }
-
-    FEEDBACKS {
-
-        int ID PK
-
-        int ProfessorID FK
-
-        int Rating
-
-        string Comment
-
-        string StudentIP
-
-        datetime CreatedAt
-
-        boolean IsSpam
-
-    }
-
+    USERS ||--o| PROFESSORS : "has"
+    PROFESSORS ||--o{ FEEDBACKS : "receives"
+    
+    USERS {
+        int ID PK
+        string Username
+        string PasswordHash
+        string Role
+        datetime CreatedAt
+    }
+    
+    PROFESSORS {
+        int ID PK
+        string Name
+        string Email
+        string Course
+        int AppUserId FK
+    }
+    
+    FEEDBACKS {
+        int ID PK
+        int ProfessorID FK
+        int Rating
+        string Comment
+        string StudentIP
+        datetime CreatedAt
+        boolean IsSpam
+    }
 ```
 
 ---
 
 ## User Roles
 
-### Student (Anonyme)
+### Student (Anonymous)
 
-1. Visits the home page
-
-2. Accepts the privacy notice
-
-3. Selects a professor/course
-
-4. Rates (1–5 stars) + comment
-
-5. Submits the feedback
-
-6. **No account, no tracking**
+1. Navigates to the public landing page.
+2. Reviews and accepts the privacy and anonymity notice.
+3. Selects the target professor and course.
+4. Submits a quantitative rating (1–5 stars) alongside qualitative comments.
+5. Completes submission.
+6. **Zero footprint: No account creation, no tracking cookies.**
 
 ### Professor (Authenticated)
 
-1. Logs in with credentials
-
-2. Dashboard avec **their feedback only**
-
-3. Filters by date, rating, and course
-
-4. Exports data to CSV
-
-5. Views averages and suggestions
-
-6. **Cannot view other professors’ feedback**
+1. Authenticates via secure credentials.
+2. Accesses a personalized dashboard displaying **only their respective evaluations**.
+3. Applies filters by date, rating threshold, and specific courses.
+4. Exports datasets to CSV for offline review.
+5. Reviews aggregated averages and student suggestions.
+6. **Strict data isolation: Cannot access peer evaluations.**
 
 ### Admin / Coordinator (Authenticated)
 
-1. Logs in with credentials
-
-2. Global dashboard (all feedback)
-
-3. Advanced filtering and analytics
-
-4. Professor management (add/remove)
-
-5. System export and reporting
-
-6. **Full access to all data**
+1. Authenticates via administrative credentials.
+2. Accesses the global institutional dashboard.
+3. Utilizes advanced filtering and cross-departmental analytics.
+4. Manages faculty profiles (provisioning/deprovisioning).
+5. Executes system-wide data exports and compliance reporting.
+6. **Full administrative oversight.**
 
 ---
 
@@ -283,258 +210,179 @@ erDiagram
 
 ### Prerequisites
 
--  Python 3.9+
-
--  Azure SQL Database (ou SQL Server local)
-
--  ODBC Driver 18 for SQL Server
-
--  pip (Python package manager)
+- Python 3.9+
+- Azure SQL Database (or local SQL Server instance)
+- ODBC Driver 18 for SQL Server
+- `pip` (Python package manager)
 
 ### Local Installation
 
 **1. Clone the repository**
 
 ```bash
-
 git clone https://github.com/boujaadamohammed/campusvoice.git
-
 cd campusvoice
-
 ```
 
 **2. Create a virtual environment**
 
 ```bash
-
 python -m venv venv
-
-source venv/bin/activate        # Linux/macOS
-
-venv\Scripts\activate           # Windows
-
+source venv/bin/activate        # Linux/macOS
+venv\Scripts\activate           # Windows
 ```
 
 **3. Install dependencies**
 
 ```bash
-
 pip install -r requirements.txt
-
 ```
 
 **4. Configure environment variables**
 
 ```bash
-
 cp .env.example .env
-
 # Edit .env with your Azure SQL credentials
-
 ```
 
-**5. Install the ODBC driver** (if necessary)
+**5. Install the ODBC driver** (if not already present)
 
 ```bash
-
 # Ubuntu/Debian:
-
-sudo apt-get install odbc-msodbcsql18
+sudo apt-get install msodbcsql18
 
 # macOS:
-
 brew install msodbcsql18
 
-# Windows: Download from Microsoft
-
+# Windows: Download via Microsoft Installer
 ```
 
 **6. Run the application**
 
 ```bash
-
 # Development mode
-
 flask run
 
 # Production mode
-
 gunicorn -w 4 -b 0.0.0.0:8000 app:app
-
 ```
 
- Access: `http://localhost:5000`
+ Access the interface at: `http://localhost:5000`
 
 ### Environment Variables
 
-Create a file `.env` in the root directory :
+Create a `.env` file in the root directory:
 
 ```bash
-
 # Flask Configuration
-
 FLASK_ENV=production
-
 SECRET_KEY=your-super-secret-key-change-this
 
 # Azure SQL Database
-
 DB_SERVER=your-server.database.windows.net
-
 DB_USER=your-sql-username
-
 DB_PASSWORD=your-sql-password
-
 DB_NAME=campusvoice_db
 
 # Security Settings
-
-SESSION_TIMEOUT=1800           # 30 minutes
-
-MAX_LOGIN_ATTEMPTS=5           # Max login attempts
-
-RATE_LIMIT_WINDOW=60           # Window in seconds
-
+SESSION_TIMEOUT=1800           # 30 minutes
+MAX_LOGIN_ATTEMPTS=5           # Max login attempts before lockout
+RATE_LIMIT_WINDOW=60           # Window in seconds
 ```
 
->  **NEVER commit `.env` to version control!**
+> **SECURITY WARNING: NEVER commit the `.env` file to version control.**
 
 ---
 
 ## Azure Deployment
 
-### Option 1 : Azure CLI (Recommended)
+### Option 1: Azure CLI (Recommended)
 
 ```bash
-
 az login
-
 az group create --name campusvoice-rg --location eastus
 
-az appservice plan create --name campusvoice-plan \\
+az appservice plan create --name campusvoice-plan \
+    --resource-group campusvoice-rg --sku B1 --is-linux
 
-    --resource-group campusvoice-rg --sku B1 --is-linux
+az webapp create --resource-group campusvoice-rg \
+    --plan campusvoice-plan --name campusvoice-app \
+    --runtime "PYTHON|3.11"
 
-az webapp create --resource-group campusvoice-rg \\
-
-    --plan campusvoice-plan --name campusvoice-app \\
-
-    --runtime "PYTHON|3.11"
-
-az webapp config appsettings set \\
-
-    --resource-group campusvoice-rg --name campusvoice-app \\
-
-    --settings @settings.json
+az webapp config appsettings set \
+    --resource-group campusvoice-rg --name campusvoice-app \
+    --settings @settings.json
 
 az webapp up --resource-group campusvoice-rg --name campusvoice-app
-
 ```
 
-### Option 2 : Azure Portal
+### Option 2: Azure Portal
 
-1. Create an **App Service** (Python 3.11)
+1. Provision an **App Service** (Python 3.11 runtime).
+2. Provision an **Azure SQL Database**.
+3. Deploy the codebase via Git integration or ZIP deploy.
+4. Inject environment variables via the Configuration blade.
+5. Configure SQL Firewall rules to allow the App Service outbound IP.
 
-2. Create ane **Azure SQL Database**
+### Option 3: GitHub Actions (CI/CD)
 
-3. Upload the code via Git/ZIP
-
-4. Configure environment variables
-
-5. Configure the SQL firewall rules
-
-### Option 3 : GitHub Actions (CI/CD)
-
-Automatic deployment on every push via `.github/workflows/deploy.yml`
+Automated deployment pipeline triggered upon repository pushes via `.github/workflows/deploy.yml`.
 
 ---
 
 ## Project Structure
 
 ```text
-
 campusvoice/
-
 │
-
-├── app.py                      # Main Flask application
-
-├── requirements.txt            # Python dependencies
-
-├── .env.example               # Environment variables template
-
-├── .gitignore                 # Files ignored by Git
-
-├── Procfile                   # Deployment configuration
-
+├── app.py                      # Main Flask application entry point
+├── requirements.txt            # Python dependencies manifest
+├── .env.example                # Environment variables template
+├── .gitignore                  # Git ignore rules
+├── Procfile                    # PaaS deployment configuration
 │
-
-├── static/                    # Static resources
-
-│   ├── style.css              # CSS styles
-
-│  &#x20;
-
+├── static/                     # Static assets
+│   └── style.css               # Global CSS styles
 │
-
-├── templates/                 # Jinja2 templates
-
-│   ├── index.html             # Home page
-
-│   ├── login.html             # Login page
-
-│   ├── dashboard.html         # Admin/Professor dashboard
-
-│   ├── feedback-form.html     # Anonymous feedback form
-
-│   └── base.html              # Base template
-
+├── templates/                  # Jinja2 HTML templates
+│   ├── index.html              # Public landing page
+│   ├── login.html              # Authentication interface
+│   ├── dashboard.html          # Admin/Professor analytics dashboard
+│   ├── feedback-form.html      # Anonymous evaluation form
+│   └── base.html               # Master layout template
 │
-
-├── deployments/               # Azure configurations
-
-│   ├── azure-deploy.sh        # Deployment script
-
-│   └── README_AZURE.md        # Azure guide
-
+├── deployments/                # Cloud configurations
+│   ├── azure-deploy.sh         # Bash deployment script
+│   └── README_AZURE.md         # Azure-specific documentation
 │
-
-└── docs/                      # Documentation
-
-    ├── architecture.md        # Technical architecture
-
-    └── security.md            # Security documentation
-
+└── docs/                       # Technical documentation
+    ├── architecture.md         # System architecture overview
+    └── security.md             # Security policies and implementation
 ```
 
 ---
 
 ## Tests
 
-### Test the database connection
+### Verify Database Connectivity
 
 ```bash
-
-# Visit : http://localhost:5000/test-db
-
-# Should return the connection status and the number of tables
-
+# Navigate to: http://localhost:5000/test-db
+# Expected output: Connection status and table count verification.
 ```
 
-### Test Rate Limiting
+### Validate Rate Limiting
 
 ```bash
-
-# Try several rapid login attempts — access should be blocked after 5 attempts
-
+# Execute multiple rapid login attempts. 
+# Expected behavior: Access should be temporarily blocked after 5 failed attempts.
 ```
 
-### Test CSRF Protection
+### Verify CSRF Protection
 
 ```bash
-
-# Try submitting a form without a CSRF token — it should fail
-
+# Attempt to submit a form with the CSRF token stripped or manipulated.
+# Expected behavior: The server should reject the request with a 400 Bad Request error.
 ```
 
 ---
@@ -543,37 +391,24 @@ campusvoice/
 
 ### Implemented
 
-- [x] 3-tier Flask + Azure SQL architecture
-
-- [x] Anonymity system for students
-
-- [x] Dashboard with filters and CSV export
-
-- [x] CSRF protection and rate limiting
-
-- [x] Deployment on Azure App Service
+- [x] 3-Tier Flask + Azure SQL architecture
+- [x] Strict anonymity protocols for student evaluations
+- [x] Analytics dashboard with dynamic filtering and CSV export
+- [x] CSRF mitigation and application-level rate limiting
+- [x] Production deployment on Azure App Service
 
 ### In Progress / Upcoming
 
-- [ ]  Replace MD5 with **bcrypt/Argon2**
-
-- [ ]  Integrate **Azure Key Vault** for secrets
-
-- [ ] 🆔 Integrate **Microsoft Entra ID** (SSO)
-
-- [ ]  **Multi-Factor Authentication** (MFA)
-
-- [ ]  Dashboard analytique avec **Chart.js / D3.js**
-
-- [ ]  Mobile application **React Native**
-
-- [ ]  Real-time notifications
-
-- [ ]  Report generation **PDF**
-
-- [ ]  **Analyse de sentiment** of comments
-
-- [ ]  Spam detection using **Machine Learning**
+- [ ] Upgrade password hashing from MD5 to **bcrypt/Argon2**
+- [ ] Integrate **Azure Key Vault** for centralized secrets management
+- [ ] 🆔 Implement **Microsoft Entra ID** (SSO) integration
+- [ ] Enforce **Multi-Factor Authentication** (MFA) for administrative roles
+- [ ] Advanced Analytics Dashboard utilizing **Chart.js / D3.js**
+- [ ] Cross-platform mobile application via **React Native**
+- [ ] Real-time websocket notifications for new feedback
+- [ ] Automated institutional reporting via **PDF generation**
+- [ ] **Sentiment Analysis** applied to qualitative comments
+- [ ] Automated spam detection utilizing **Machine Learning models**
 
 ---
 
@@ -582,133 +417,84 @@ campusvoice/
 <div align="center">
 
 <table>
-
-  <tr>
-
-    <td align="center">
-
-      <a href="https://github.com/mohammed-boujaada">
-
-        <img src="https://avatars.githubusercontent.com/mohammed-boujaada" width="120px;" alt="Mohammed Boujaada"/>
-
-        <br/>
-
-        <sub><b>Mohammed Boujaada</b></sub>
-
-      </a>
-
-      <br/>
-
-       MIATE Master’s — FPN Nador
-
-      <br/>
-
-      <a href="https://github.com/mohammed-boujaada">
-
-        <img src="https://img.shields.io/badge/GitHub-@mohammed-boujaada-black?logo=github"/>
-
-      </a>
-
-      <a href="https://www.linkedin.com/in/mohammed-boujaada-229a3333a/">
-
-        <img src="https://img.shields.io/badge/LinkedIn-Boujaada%20Mohammed-blue?logo=linkedin"/>
-
-      </a>
-
-    </td>
-
-    <td align="center">
-
-      <a href="https://github.com/moza369">
-
-        <img src="https://avatars.githubusercontent.com/moza369" width="120px;" alt="Mohamed Zahir"/>
-
-        <br/>
-
-        <sub><b>Mohamed Zahir</b></sub>
-
-      </a>
-
-      <br/>
-
-       MIATE Master’s — FSA Nador
-
-      <br/>
-
-      <a href="https://github.com/moza369">
-
-        <img src="https://img.shields.io/badge/GitHub-@moza369-black?logo=github"/>
-
-      </a>
-
-    </td>
-
-  </tr>
-
+<tr>
+<td align="center">
+<a href="https://github.com/mohammed-boujaada">
+<img src="https://github.com/mohammed-boujaada.png" width="120px;" alt="Mohammed Boujaada"/>
+<br/>
+<sub><b>Mohammed Boujaada</b></sub>
+</a>
+<br/>
+MIATE Master's — FSA Nador
+<br/>
+<a href="https://github.com/mohammed-boujaada">
+<img src="https://img.shields.io/badge/GitHub-@mohammed--boujaada-black?logo=github"/>
+</a>
+<a href="https://www.linkedin.com/in/mohammed-boujaada-229a3333a/">
+<img src="https://img.shields.io/badge/LinkedIn-Boujaada%20Mohammed-blue?logo=linkedin"/>
+</a>
+</td>
+<td align="center">
+<a href="https://github.com/moza369">
+<img src="https://github.com/moza369.png" width="120px;" alt="Mohamed Zahir"/>
+<br/>
+<sub><b>Mohamed Zahir</b></sub>
+</a>
+<br/>
+MIATE Master's — FSA Nador
+<br/>
+<a href="https://github.com/moza369">
+<img src="https://img.shields.io/badge/GitHub-@moza369-black?logo=github"/>
+</a>
+</td>
+</tr>
 </table>
 
 </div>
 
-** Institution** : FPN Nador — Master's in Artificial Intelligence & Emerging Technologys  
-
-** Module** : Cloud Computing  
-
-** Year** : 2025 - 2026
-
-</div>
+**Institution**: FSA Nador — Master's in Artificial Intelligence & Emerging Technologies  
+**Module**: Cloud Computing  
+**Academic Year**: 2025 - 2026
 
 ---
 
 ## License
 
-This project is provided **as is** for educational purposes.  
-
-Free to use, modify, and share in an academic context.
+This project is provided **as is** strictly for educational and academic purposes.  
+Free to use, modify, and distribute within non-commercial, academic contexts.
 
 ---
 
 ## Acknowledgments
 
--  **Microsoft Azure** — $100 student credit for cloud infrastructure
-
--  **Flask** — Lightweight and high-performance web framework
-
--  **FPN Nador** — Academic supervision and project requirements
-
--  All contributors and testers
+- **Microsoft Azure** — $100 student credit utilized for cloud infrastructure provisioning.
+- **Flask** — Lightweight, high-performance Python web framework.
+- **FSA Nador** — Academic supervision and foundational project requirements.
+- All contributors, peer reviewers, and beta testers.
 
 ---
 
 ## Citation
 
 ```bibtex
-
 @misc{boujaada2026campusvoice,
-
-  author = {Boujaada Mohammed and Zahir Mohamed},
-
-  title = {CampusVoice: Anonymous University Feedback Platform on Azure},
-
-  year = {2026},
-
-  publisher = {GitHub},
-
-  journal = {GitHub repository},
-
-  howpublished = {\url{https://github.com/mohammed-boujaada/CampusVoice}}
-
+  author = {Boujaada, Mohammed and Zahir, Mohamed},
+  title = {CampusVoice: Anonymous University Feedback Platform on Azure},
+  year = {2026},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/mohammed-boujaada/CampusVoice}}
 }
-
 ```
 
 ---
 
 <div align="center">
 
-### ⭐ If you find this project useful, feel free to give it a star!
+### ⭐ If you find this project useful, please consider giving it a star!
 
-**Developed by  par Mohammed Boujaada & Mohamed Zahir**
+**Developed by Mohammed Boujaada & Mohamed Zahir**
 
-**Academic project — MIATE Master’s — FPN Nador — 2026**
+**Academic Project — MIATE Master’s — FSA Nador — 2026**
 
 </div>
