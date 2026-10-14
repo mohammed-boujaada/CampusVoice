@@ -1,28 +1,26 @@
 # CampusVoice
 
+```html
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+<img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white" />
+<img src="https://img.shields.io/badge/Flask-2.3-000000?logo=flask&logoColor=white" />
+<img src="https://img.shields.io/badge/Azure-Deployed-0078D4?logo=microsoftazure&logoColor=white" />
+<img src="https://img.shields.io/badge/Azure%20SQL-Database-CC2927?logo=microsoftsqlserver&logoColor=white" />
+<img src="https://img.shields.io/badge/Security-CSRF%20%7C%20Rate%20Limit-green" />
+<img src="https://img.shields.io/badge/License-Educational-orange" />
+<img src="https://img.shields.io/badge/Status-Active-brightgreen" />
 
-![Flask](https://img.shields.io/badge/Flask-2.3-000000?logo=flask&logoColor=white)
-
-![Azure](https://img.shields.io/badge/Azure-Deployed-0078D4?logo=microsoftazure&logoColor=white)
-
-![SQL](https://img.shields.io/badge/Azure%20SQL-Database-CC2927?logo=microsoftsqlserver&logoColor=white)
-
-![Security](https://img.shields.io/badge/Security-CSRF%20%7C%20Rate%20Limit-green)
-
-![License](https://img.shields.io/badge/License-Educational-orange)
-
-![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+<br><br>
 
 **Secure Anonymous Feedback Platform for Universities**
 
-**Cloud Computing Mini-Project — MIATE Master's — FPN Nador**
+**Cloud Computing Project — MIATE Master's — FPN Nador**
 
 [Overview](#overview) • [Architecture](#architecture) • [Security](#security) • [Azure Deployment](#azure-deployment) • [Team](#team)
 
 </div>
+```
 
 ---
 
@@ -633,7 +631,7 @@ campusvoice/
 
       <br/>
 
-       MIATE Master’s — FPN Nador
+       MIATE Master’s — FSA Nador
 
       <br/>
 
